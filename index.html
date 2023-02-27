@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Document</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
             padding: 0;
@@ -18,6 +19,7 @@
         body {
             width: 100%;
             height: 100%;
+            background-color: #faf5ff;
         }
 
         #plan {
@@ -32,11 +34,15 @@
         }
 
         .entry {
-            border-radius: .25rem;
-            background-color: #eaeaea;
+            border-radius: 4px;
+            border: 1px solid;
+            border-color: rgb(241 245 249);
+            background-color: #f3f4f6;
             margin: .5rem;
-            padding: .5rem;
-            width: 90%;            
+            padding: .5rem 1rem;
+            width: 90%;       
+            height: 3rem;     
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
         }
 
@@ -49,18 +55,15 @@
         .time {
             font-size: 1rem;
             margin-right: 1rem;
+            font-weight: 300;
         }
 
         .lab {
-            background-color: rgb(233, 163, 163);
+            background-color: #ffedd5;
         }
 
         .wyk {
-            background-color: rgb(180, 245, 223);
-        }
-
-        .empty {
-            height: 2rem;
+            background-color: #ccfbf1;
         }
 
         h1 {
@@ -71,11 +74,66 @@
         h2 {
             font-size: 1rem;
             opacity: .5;
+            font-weight: 400;
+        }
+
+        #day-info {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            opacity: .25;
+            font-size: 1rem;
+            text-align: center;
+            padding: .25rem;
+        }
+
+        #background {
+            z-index: -1;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+
+            background-image: url('icon.png');
+            background-position: top;
+            background-size: cover;
+            background-repeat: no-repeat;
+
+            mix-blend-mode: difference;
+
+            opacity: .06;
+        }
+
+        #logo-container {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+
+        }
+
+        #logo {
+            width: 4rem;
+            aspect-ratio: 1;
+        }
+
+        @media screen and (max-height: 650px) {
+            #logo {
+                display: none !important;
+            }
         }
     </style>
 </head>
 <body>
+    <div id="logo-container">
+        <img id="logo" src="icon.png">
+    </div>
+    <div id="background"></div>
     <div id="plan"></div>
+    <div id="day-info"></div>
     <script src="xeact.js"></script>
     <script>
         const times = [
@@ -174,6 +232,7 @@
         const now = new Date();
 
         const plan = now.getWeekNumber() % 2 === 0 ? NP : P
+        const tydzien = now.getWeekNumber() % 2 === 0 ? 'NP' : 'P';
         const dayNum = now.getDay()
 
         const todaysPlan = plan[dayNum]
@@ -197,17 +256,22 @@
                             h('h2', {innerText: `${elem.location}`})
                         ]),
                         h('h1', {innerText: `${elem.name}`}),
-
-                        
                     ])
                 )
                 
             } else {
                 planElem.appendChild(
-                    h('div', {className: 'entry empty'})
+                    h('div', {className: `entry empty`}, [
+                        h('div', {className: 'info'}, [
+                            h('div', {className: 'time', innerText: `${times[index]}`}),
+                        ]),
+                        h('h1', {innerText: `-`}),
+                    ])
                 )
             }
         }
+
+        g('day-info').innerText = `${now.toLocaleDateString()} - tydzień ${tydzien}`;
 
     </script>
 </body>
